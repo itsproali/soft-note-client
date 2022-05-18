@@ -1,31 +1,39 @@
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../firebase-init";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import MyTasks from "./MyTasks";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [user] = useAuthState(auth);
   const [tasks, setTasks] = useState([]);
   const userId = user?.uid;
   const handleAddTask = (e) => {
     e.preventDefault();
-    const taskName = e.target.taskName.value;
-    const taskDescription = e.target.taskDescription.value;
-    const complete = false;
-    const task = { taskName, taskDescription, complete, userId };
-    fetch("https://soft-note.herokuapp.com/add-task", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ task, userId }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setTasks(data);
-        e.target.taskName.value = "";
-        e.target.taskDescription.value = "";
-      });
+    if (user) {
+      const taskName = e.target.taskName.value;
+      const taskDescription = e.target.taskDescription.value;
+      const complete = false;
+      const task = { taskName, taskDescription, complete, userId };
+      fetch("https://soft-note.herokuapp.com/add-task", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ task, userId }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setTasks(data);
+          e.target.taskName.value = "";
+          e.target.taskDescription.value = "";
+        });
+    } else {
+      toast.error("You aren't logged in. Please Login first");
+      navigate("/login");
+    }
   };
 
   return (
