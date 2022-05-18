@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Cairo", sans-serif;
+    background-color: white;
+}
+
+.loading-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: purple;
+}
+
+.loading-wrapper .loading {
+    font-size: 60px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    line-height: 1;
+    mix-blend-mode: difference;
+}
+
+.loading-wrapper::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    background-color: purple;
+    animation: move 2s linear infinite;
+}
+
+@keyframes move {
+
+    0%,
+    100% {
+        left: 0;
+    }
+
+    50% {
+        left: calc(100% - 100px);
+    }
+}
